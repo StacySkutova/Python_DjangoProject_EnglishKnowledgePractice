@@ -1,0 +1,21 @@
+{% extends  'base.html' %}
+{% load crispy_forms_tags %}
+{% block main %}
+    <div style="width:100%;display:flex;justify-content:space-around">
+        <div style="width:30%;height:40%;padding:50px;background-color:aliceblue;border:3px solid black;border-radius:10px">
+            <h2>Log in to your account</h2>
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ next }}">
+                <span style="margin-bottom:20px;font-size:24px">{{ form|crispy }}</span>
+                <button type="submit"
+                        style="width:80px;height:30px;margin-top:30px;background-color:lightblue;border:2px solid blue;border-radius:8px;font-size:16px">
+                    Log in
+                </button>
+                <a href=".." style="margin-left:10px;text-decoration:none;color:darkblue;font-size:18px">
+                    Back to home
+                </a>
+            </form>
+        </div>
+    </div>
+{% endblock %}

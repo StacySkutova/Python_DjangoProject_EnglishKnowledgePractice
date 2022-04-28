@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block main %}
+    {% if message %}
+        <p><strong>
+            <center style="font-size:20px;color:orangered">{{ message }}</center>
+        </strong></p>
+    {% endif %}
+    {% if latest_words %}
+        <div style="display:flex;flex-wrap:wrap">
+            {% for word in latest_words %}
+                <div style="width:200px;height:70px;background-color:lightgreen;color:white;border: 2px solid green;border-radius:8px;padding-top:35px;margin:20px;text-align:center">
+                    <a href="/words/{{ word.id }}/" style="text-decoration:none;color:white;font-size:30px">
+                        {{ word.word_text }}
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>На данный момент нет слов, чтобы проверить свои знания</p>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>English knowledge test practise</title>
+</head>
+<body style="background:url(https://newsib.net/wp-content/uploads/2016/12/01d0bccfac6ab7d9c9854f594bbf1d1f.jpeg);background-size:100%">
+<h1><em>
+    <center style="font-size:50px">English words</center>
+</em></h1>
+{% if user.is_authenticated %}
+    <p style="text-align:right;margin-right:50px">
+        <span style="font-size:26px;color:darkgreen">Hello, {{ user.username }}!</span>
+        <a href="/words/logout" style="text-decoration:none;color:black;font-size:22px">Log out</a>
+        <span style="font-size:22px"> | </span>
+        <a href="/words/password-change" style="text-decoration:none;color:black;font-size:22px">Change password</a>
+    </p>
+{% else %}
+    <p style="text-align:right;margin-right:30px">
+        <a href="/words/login" style="text-decoration:none;color:black;font-size:22px">Log in</a>
+        <span style="font-size:22px"> | </span>
+        <a href="/words/register" style="text-decoration:none;color:black;font-size:22px">Register</a>
+    </p>
+{% endif %}
+{% block main %}
+{% endblock %}
+</body>
+</html>

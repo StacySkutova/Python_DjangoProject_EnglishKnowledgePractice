@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block main %}
+    <div style="width:50%;height:100%;margin-left:50px;background-color:aliceblue;border:3px solid black;border-radius:10px">
+        <br>
+        <a href="/words" style="margin:10px;text-decoration:none;color:lightseagreen;font-size:18px"> &lt Вернуться к
+            карточкам всех слов</a>
+        <h1 style="margin-left:50px"><i><u style="color:lightcoral">{{ word.word_text }}</u> переводится как?</i></h1>
+        <p><strong>{{ method }}</strong></p>
+        {% if error_message %}
+            <p>
+                <strong style="margin-left:50px;font-size:20px;color:orangered">{{ error_message }}</strong>
+            </p>
+        {% endif %}
+        <form action="options/" method="post"
+              style="margin-left:40px">
+            {% csrf_token %}
+            {% for translation in word.translation_set.all %}
+                <input type="radio" name="translation" id="translation{{ forloop.counter }}"
+                       value="{{ translation.id }}"
+                       style="margin-bottom:15px"/>
+                <label for="translation{{ forloop.counter }}"
+                       style="margin-bottom:20px;margin-left:10px;font-size:26px">
+                    {{ translation.text }}
+                </label>
+                <br>
+            {% endfor %}
+            <input type="submit" value="Answer"
+                   style="width:100px;height:40px;margin-top:20px;background-color:lightgreen;border:2px solid green;border-radius:8px;font-size:20px"/>
+        </form>
+        <br>
+        <hr>
+        <h2 style="margin-left:30px;color:darkblue">Chat</h2>
+        {% if user.is_authenticated %}
+            <form action="post/" method="post" style="margin-left:30px">
+                {% csrf_token %}
+                <input type=" text" placeholder="Напечатайте свое сообщение здесь..." name="message"
+                       style="padding:10px;width:80%;height:70px;border-radius:8px"/>
+                <input type="submit" value="Send"
+                       style="width:80px;height:30px;margin-left:15px;background-color:lightblue;border:2px solid blue;border-radius:8px;font-size:16px"/>
+            </form>
+            <br>
+        {% endif %}
+        <div id="history">
+            {% for message in latest_messages %}
+                <div style="width:90%;padding:10px;margin-left:30px;background-color:white;border:2px solid lightseagreen;border-radius:8px">
+                    <strong style="font-size:16px">
+                        {{ message.author.username }}
+                    </strong>
+                    <br/>
+                    <em style="font-size:10px">
+                        {{ message.pub_date|date:'Y-m-d H:i:s' }}
+                    </em>
+                    <br/>
+                    <div style="margin-top:20px;font-size:20px">{{ message.message }}</div>
+                </div>
+                <br/>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js">
+    </script>
+    <script>
+        function send_msg_update_request() {
+            $.get("msg_list/", {}, parse_msg_update_response);
+        }
+
+        function parse_msg_update_response(data, success) {
+            res = JSON.parse(data);
+            res_str = "";
+            for (i = 0; i < res.length; i++) {
+                res_str += '<div style="width:90%;padding:10px;margin-left:30px;background-color:white;border:2px solid lightseagreen;border-radius:8px">\n' +
+                    '            <strong style="font-size:16px">\n' +
+                    '                ' + res[i].author__username + '\n' +
+                    '            </strong>\n' +
+                    '            <br/>\n' +
+                    '            <em style="font-size:10px">\n' +
+                    '                ' + res[i].pub_date + '\n' +
+                    '            </em>\n' +
+                    '            <br/>\n' +
+                    '            <div style="margin-top:20px;font-size:20px">\n' +
+                    '            ' + res[i].message + '\n' +
+                    '            </div>\n' +
+                    '        </div>\n' +
+                    '        <br/>'
+            }
+            $("#history").html(res_str);
+        }
+
+        setInterval(send_msg_update_request, 5000);
+    </script>
+{% endblock %}
